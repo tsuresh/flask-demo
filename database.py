@@ -1,7 +1,10 @@
 from flask import Flask, jsonify, request
 import mysql.connector
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # MySQL configuration
 db_config = {
@@ -17,10 +20,12 @@ def get_db_connection():
     return conn
 
 @app.route('/')
+@cross_origin()
 def index():
     return 'Welcome to the Flask MySQL app!'
 
 @app.route('/users', methods=['GET'])
+@cross_origin()
 def get_users():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -31,6 +36,7 @@ def get_users():
     return jsonify(users)
 
 @app.route('/user', methods=['POST'])
+@cross_origin()
 def add_user():
     new_user = request.json
     conn = get_db_connection()
