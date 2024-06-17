@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Webpage</title>
+  </head>
+  <body>
+    <h1>Welcome to My Webpage</h1>
+    <p>This is a basic HTML webpage.</p>
+    <button onclick="buttonClicked();">Click Me</button>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      function buttonClicked() {
+        let data = JSON.stringify({
+          name: "Suresh",
+          email: "suresh@test.com",
+        });
+
+        let config = {
+          method: "post",
+          maxBodyLength: Infinity,
+          url: "http://127.0.0.1:5000/user",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: data,
+        };
+
+        axios
+          .request(config)
+          .then((response) => {
+            console.log(JSON.stringify(response.data));
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    </script>
+  </body>
+</html>
