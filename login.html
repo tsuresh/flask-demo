@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Login</title>
+  </head>
+  <body>
+    <h1>User Login</h1>
+    <div>
+      <label for="username">Username:</label>
+      <input type="text" id="username" placeholder="Enter username" />
+    </div>
+    <br>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" placeholder="Enter password" />
+    </div>
+    <br>
+    <button onclick="loginUser();">Login</button>
+    <div id="loginMessage"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      function loginUser() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        
+        if (!username || !password) {
+          alert("Please enter both username and password");
+          return;
+        }
+
+        let data = JSON.stringify({
+          username: username,
+          password: password,
+        });
+
+        let config = {
+          method: "post",
+          maxBodyLength: Infinity,
+          url: "http://127.0.0.1:5000/login",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          data: data,
+        };
+
+        axios
+          .request(config)
+          .then((response) => {
+            var message = response.data.message;
+            document.getElementById("loginMessage").innerHTML = 
+              '<p style="color: green;">' + message + '</p>';
+            // Clear the form
+            document.getElementById("username").value = '';
+            document.getElementById("password").value = '';
+          })
+          .catch((error) => {
+            console.log(error);
+            var errorMessage = error.response?.data?.error || 'Login failed';
+            document.getElementById("loginMessage").innerHTML = 
+              '<p style="color: red;">' + errorMessage + '</p>';
+          });
+      }
+    </script>
+  </body>
+</html>
